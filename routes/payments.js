@@ -6,7 +6,7 @@ const razorpay = require("../models/payment");
 router.post("/order", async (req, res) => {
   const { amount, currency, receipt } = req.body;
   const options = {
-    amount: amount * 100,
+    amount: amount * 1,
     currency,
     receipt,
   };
