@@ -2,8 +2,13 @@ const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const paymentRoutes = require("./routes/payments");
+
+// Routes
 const purchasesRoute = require("./routes/purchases");
+const indexRoute = require("./routes/index");
+const productsRoute = require("./routes/products");
+const usersRoute = require("./routes/users");
+const paymentsRoute = require("./routes/payments");
 
 const app = express();
 
@@ -38,11 +43,7 @@ mongoose.connection.on("reconnectFailed", () => {
   console.log("Mongoose Reconnect Failed");
 });
 
-// Routes
-const indexRoute = require("./routes/index");
-const productsRoute = require("./routes/products");
-const usersRoute = require("./routes/users");
-const paymentsRoute = require("./routes/payments");
+
 
 app.use("/", indexRoute);
 app.use("/products", productsRoute);

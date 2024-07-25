@@ -46,6 +46,7 @@ router.post("/login", async (req, res) => {
     res.json({
       name: user.name,
       email: user.email,
+      user_id: user._id
     });
   } catch (err) {
     console.error("Error during login:", err); // Log error
