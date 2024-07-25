@@ -39,7 +39,12 @@ router.post("/save", async (req, res) => {
 // Get purchases by user ID
 router.get("/:userId", async (req, res) => {
   try {
-    const purchases = await Purchase.find({ userId: req.params.userId });
+    let userId = req.params.userId;
+    if (!userId) {
+      return res.status(400).json({ message: "User is not logged in" });
+    }
+
+    const purchases = await Purchase.find({ userId });
     res.json(purchases);
   } catch (err) {
     console.error("Error fetching purchases:", err); // Log errors
