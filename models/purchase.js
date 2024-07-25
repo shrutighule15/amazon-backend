@@ -10,13 +10,10 @@ const purchaseSchema = new mongoose.Schema({
     {
       productId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Product",
         required: true,
       },
-      price: {
-        type: Number,
-        required: true,
-      },
+      quantity: { type: Number, required: true },
+      price: { type: Number, required: true },
     },
   ],
   totalAmount: {
@@ -28,5 +25,5 @@ const purchaseSchema = new mongoose.Schema({
     default: Date.now,
   },
 });
-const Purchase = mongoose.model("Purchase", purchaseSchema);
-module.exports = Purchase;
+
+module.exports = mongoose.model("Purchase", purchaseSchema);

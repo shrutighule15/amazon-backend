@@ -3,26 +3,40 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const paymentRoutes = require("./routes/payments");
-const purchasesRouter = require("./routes/purchases");
+const purchasesRoute = require("./routes/purchases");
 
 const app = express();
+
 // Middleware
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use("/api/purchases", purchasesRouter);
-
-// Enable Mongoose debugging
-// mongoose.set("debug", true);
 
 // Database connection
 mongoose
   .connect(
     "mongodb+srv://shrutighule555:Shruti15@cluster0.qoyxj0c.mongodb.net/amazon",
-    { useNewUrlParser: true, useUnifiedTopology: true }
+    { useNewUrlParser: true, useUnifiedTopology: true, connectTimeoutMS: 30000 }
   )
   .then(() => console.log("MongoDB connected..."))
   .catch((err) => console.log(err));
+
+// Additional logging for connection errors
+mongoose.connection.on("error", (err) => {
+  console.error("MongoDB connection error:", err);
+});
+mongoose.connection.on("connected", () => {
+  console.log("Mongoose connected to DB Cluster");
+});
+mongoose.connection.on("disconnected", () => {
+  console.log("Mongoose Disconnected");
+});
+mongoose.connection.on("reconnected", () => {
+  console.log("Mongoose Reconnected");
+});
+mongoose.connection.on("reconnectFailed", () => {
+  console.log("Mongoose Reconnect Failed");
+});
 
 // Routes
 const indexRoute = require("./routes/index");
@@ -34,6 +48,7 @@ app.use("/", indexRoute);
 app.use("/products", productsRoute);
 app.use("/users", usersRoute);
 app.use("/api/payment", paymentsRoute);
+app.use("/api/purchases", purchasesRoute);
 
 const port = process.env.PORT || 8000;
 app.listen(port, () => console.log(`Server running on port ${port}`));

@@ -21,20 +21,34 @@ router.get("/:id", getUser, (req, res) => {
 // User login
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
-  // Debugging information
-  console.log("Login attempt:", email);
+  console.log("Login attempt with email:", email); // Log login attempt
+
   try {
-    const user = await User.findOne({ email: email, password: password });
-    // Debugging information
-    console.log("User found:", user);
+    if (!email || !password) {
+      console.log("Missing email or password"); // Log missing fields
+      return res
+        .status(400)
+        .json({ message: "Email and password are required" });
+    }
+
+    const user = await User.findOne({ email: email });
     if (!user) {
+      console.log("User not found with email:", email); // Log user not found
       return res.status(404).json({ message: "Invalid email or password" });
     }
+
+    if (user.password !== password) {
+      console.log("Incorrect password for email:", email); // Log incorrect password
+      return res.status(404).json({ message: "Invalid email or password" });
+    }
+
+    console.log("User authenticated:", user); // Log successful authentication
     res.json({
       name: user.name,
       email: user.email,
     });
   } catch (err) {
+    console.error("Error during login:", err); // Log error
     res.status(500).json({ message: err.message });
   }
 });
